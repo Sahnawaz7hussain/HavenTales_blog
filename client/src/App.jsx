@@ -7,9 +7,11 @@ import Register from "./pages/register/Register";
 import Settings from "./pages/settings/Settings";
 import Single from "./pages/single/Single";
 import Write from "./pages/write/Write";
+import { useContext } from "react";
+import { Context } from "./context/Context";
 
 function App() {
-  const isCurrentUser = false;
+  const { user } = useContext(Context);
   return (
     <div className="App">
       <Topbar />
@@ -18,27 +20,19 @@ function App() {
         <Route path="/posts" element={<Home />} />
         <Route
           path="/register"
-          element={isCurrentUser ? <Navigate to="/" /> : <Register />}
+          element={user ? <Navigate to="/" /> : <Register />}
         />
-        <Route
-          path="/login"
-          element={isCurrentUser ? <Navigate to="/" /> : <Login />}
-        />
+        <Route path="/login" element={user ? <Navigate to="/" /> : <Login />} />
         <Route path="/post/:postId" element={<Single />} />
         <Route
           path="/write"
-          element={isCurrentUser ? <Write /> : <Navigate to="/login" />}
+          element={user ? <Write /> : <Navigate to="/login" />}
         />
         <Route
           path="/settings"
-          element={isCurrentUser ? <Settings /> : <Navigate to="/login" />}
+          element={user ? <Settings /> : <Navigate to="/login" />}
         />
       </Routes>
-      {/* <Home /> */}
-      {/* <Single /> */}
-      {/* <Write /> */}
-      {/* <Settings /> */}
-      {/* <Login /> */}
     </div>
   );
 }

@@ -9,14 +9,27 @@ const updateUser = async (req, res) => {
       req.body.password = bcrypt.hashSync(req.body.password, salt);
     }
     try {
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        },
-        { new: true }
-      );
-      res.status(200).json(updatedUser);
+      const user = await UserModel.findById(req.params.id);
+      try {
+        await PostModel.updateMany(
+          { username: user.username },
+          { username: req.body.username }
+        );
+        try {
+          const updatedUser = await UserModel.findByIdAndUpdate(
+            req.params.id,
+            {
+              $set: req.body,
+            },
+            { new: true }
+          );
+          res.status(200).json(updatedUser);
+        } catch (err) {
+          res.status(500).json(err);
+        }
+      } catch (err) {
+        res.status(500).json(err);
+      }
     } catch (err) {
       res.status(500).json(err);
     }

@@ -99,3 +99,8 @@
 .settingsSubmitButton:hover {
   background-color: rgb(1, 114, 114);
 }
+.settingsSubmitButton:disabled {
+  color: rgb(10, 1, 1);
+  cursor: not-allowed;
+  background: rgb(149, 155, 155);
+}

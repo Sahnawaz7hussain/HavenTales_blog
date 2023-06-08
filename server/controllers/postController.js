@@ -38,6 +38,7 @@ const updatePost = async (req, res) => {
 
 // delete post
 const deletePost = async (req, res) => {
+  console.log("dlee: ", req.body);
   try {
     const post = await PostModel.findById(req.params.id);
     if (post.username === req.body.username) {
