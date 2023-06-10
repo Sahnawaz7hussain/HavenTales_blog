@@ -1,16 +1,15 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema(
+const userSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: [true, "can't be empty!"],
-      unique: [true, "Duplicate Username."],
     },
     email: {
       type: String,
       required: [true, "can't be empty!"],
-      unique: [true, "Duplicate email."],
+      unique: [true, "Duplicate email!"],
     },
     password: {
       type: String,
@@ -18,11 +17,13 @@ const UserSchema = new mongoose.Schema(
     },
     profilePic: {
       type: String,
-      default: "",
+      default:
+        "https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png",
     },
+    bio: { type: String, default: "Bio not added!" },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
-const UserModel = mongoose.model("user", UserSchema);
+const UserModel = mongoose.model("user", userSchema);
 module.exports = { UserModel };

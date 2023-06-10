@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const CategorySchema = new mongoose.Schema(
+const categorySchema = new mongoose.Schema(
   {
     name: {
       type: String,
@@ -8,8 +8,8 @@ const CategorySchema = new mongoose.Schema(
       unique: [true, "Duplicate category name."],
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
-const CategoryModel = mongoose.model("category", CategorySchema);
+const CategoryModel = mongoose.model("category", categorySchema);
 module.exports = { CategoryModel };

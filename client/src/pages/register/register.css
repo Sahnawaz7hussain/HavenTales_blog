@@ -16,10 +16,32 @@
   font-size: 50px;
 }
 
+.profilePicBox {
+  height: 45px;
+  width: 45px;
+  border-radius: 50%;
+  border: 1px solid lightgrey;
+  position: relative;
+}
+.profilePicBox > img {
+  height: 100%;
+  width: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+.profilePicLabel {
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+}
+.profilePicIcon {
+  font-size: 22px;
+}
 .registerForm {
-  margin-top: 20px;
   display: flex;
   flex-direction: column;
+  width: 30%;
+  margin-top: 20px;
 }
 
 .registerForm > label {
@@ -30,7 +52,8 @@
   padding: 10px;
   background-color: white;
   border: none;
-  border-radius: 10px;
+  border-radius: 5px;
+  resize: inherit;
 }
 
 .registerInput:focus {

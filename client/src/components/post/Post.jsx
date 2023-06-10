@@ -3,19 +3,12 @@ import "./post.css";
 
 export default function Post({ post }) {
   const dummyPostId = "sdfjsdfjsdjfsdfj";
-  const PF = "http://localhost:8080/images/";
   return (
     <div className="post">
-      {post.photo && (
-        <img className="postImg" src={PF + post.photo} alt="photo" />
-      )}
+      {post.photo && <img className="postImg" src={post.photo} alt="photo" />}
       <div className="postInfo">
         <div className="postCats">
-          {post?.categories.map((cats, idx) => (
-            <span key={idx} className="postCat">
-              {cats.name}
-            </span>
-          ))}
+          <span className="postCat">{post.category}</span>
         </div>
         <span className="postTitle">
           <Link to={`post/${post._id}`} className="link">

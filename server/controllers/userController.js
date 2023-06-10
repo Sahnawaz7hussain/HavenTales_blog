@@ -2,6 +2,8 @@ const bcrypt = require("bcryptjs");
 const { UserModel } = require("../models/userModel");
 const { PostModel } = require("../models/postModel");
 
+///if password :-> update password,
+/// otherwise update only user;
 const updateUser = async (req, res) => {
   if (req.body.userId === req.params.id) {
     if (req.body.password) {
@@ -9,29 +11,16 @@ const updateUser = async (req, res) => {
       req.body.password = bcrypt.hashSync(req.body.password, salt);
     }
     try {
-      const user = await UserModel.findById(req.params.id);
-      try {
-        await PostModel.updateMany(
-          { username: user.username },
-          { username: req.body.username }
-        );
-        try {
-          const updatedUser = await UserModel.findByIdAndUpdate(
-            req.params.id,
-            {
-              $set: req.body,
-            },
-            { new: true }
-          );
-          res.status(200).json(updatedUser);
-        } catch (err) {
-          res.status(500).json(err);
-        }
-      } catch (err) {
-        res.status(500).json(err);
-      }
+      const updatedUser = await UserModel.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: req.body,
+        },
+        { new: true }
+      );
+      res.status(200).json(updatedUser);
     } catch (err) {
-      res.status(500).json(err);
+      res.status(500).json(err.message);
     }
   } else {
     res.status(401).json("You can update only your account!");
@@ -63,7 +52,7 @@ const getUserById = async (req, res) => {
     const { password, ...others } = user._doc;
     res.status(200).json(others);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json(err.message);
   }
 };
 

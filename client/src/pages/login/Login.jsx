@@ -4,37 +4,42 @@ import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
 import "./login.css";
 export default function Login() {
-  const userRef = useRef();
+  const emailRef = useRef();
   const passwordRef = useRef();
-  const { dispatch, isFetching } = useContext(Context);
+  const { dispatch, isFetching, error } = useContext(Context);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
     dispatch({ type: "LOGIN_START" });
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/auth/login`,
         {
-          username: userRef.current.value,
-          password: passwordRef.current.value,
+          email,
+          password,
         }
       );
-      dispatch({ type: "LOGIN_SUCCESS", payload: res.data });
+      localStorage.setItem("token", res.data.token);
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
     } catch (err) {
-      dispatch({ type: "LOGIN_FAILURE" });
+      dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
     }
   };
-
+  if (error) {
+    alert(error);
+  }
   return (
     <div className="login">
       <span className="loginTitle">Login</span>
       <form className="loginForm" onSubmit={handleSubmit}>
-        <label>Username</label>
+        <label>Email</label>
         <input
-          type="text"
+          type="email"
           className="loginInput"
-          placeholder="Enter your username..."
-          ref={userRef}
+          placeholder="Enter your email..."
+          ref={emailRef}
         />
         <label>Password</label>
         <input

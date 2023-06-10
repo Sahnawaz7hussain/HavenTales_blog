@@ -3,47 +3,61 @@ import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
 import { Context } from "../../context/Context";
 import "./settings.css";
+import { headersObject, uploadFileToCloudinary } from "../../utils/constants";
 
 export default function Settings() {
-  const [file, setFile] = useState(null);
-  const [username, setUsername] = useState("");
-  const [email, setEmail] = useState("");
+  const [profilePic, setProfilePic] = useState(null);
+  const [fileUploading, setFileUploading] = useState(false);
+  const [fileUploadingErr, setFileUploadingErr] = useState(false);
+  const [name, setName] = useState("");
+  const [bio, setBio] = useState("");
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
   const { user, dispatch } = useContext(Context);
-  const PF = "http://localhost:8080/images/";
+
+  const handleOnChangeFile = (e) => {
+    const file = e.target.files[0];
+    setFileUploading(true);
+    setFileUploadingErr(false);
+    uploadFileToCloudinary(file)
+      .then((res) => {
+        setProfilePic(res.data.secure_url);
+        setFileUploadingErr(false);
+        setFileUploading(false);
+      })
+      .catch((err) => {
+        setFileUploadingErr(true);
+        setFileUploading(false);
+      });
+    //console.log("file: ", file);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch({ type: "UPDATE_START" });
-    const updatedUser = { userId: user._id };
-    username && (updatedUser.username = username);
-    email && (updatedUser.email = email);
+    const updatedUser = {};
+    name && (updatedUser.name = name);
+    bio && (updatedUser.bio = bio);
     password && (updatedUser.password = password);
-    if (file) {
-      const data = new FormData();
-      const filename = Date.now() + file.name;
-      data.append("name", filename);
-      data.append("file", file);
-      updatedUser.profilePic = filename;
-      try {
-        await axios.post(`${import.meta.env.VITE_BASE_URL}/upload`, data);
-      } catch (err) {
-        console.log("update profilepic err: ", err);
-      }
-    }
+    profilePic && (updatedUser.profilePic = profilePic);
+
+    dispatch({ type: "UPDATE_START" });
     try {
       const res = await axios.put(
         `${import.meta.env.VITE_BASE_URL}/users/${user._id}`,
-        updatedUser
+        updatedUser,
+        { headers: headersObject() }
       );
       setSuccess(true);
       dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
+      console.log("res: ", res);
     } catch (err) {
-      dispatch({ type: "UPDATE_FAILURE" });
+      console.log("err: ", err);
+      dispatch({ type: "UPDATE_FAILURE", payload: err });
     }
+    console.log("updated ", updatedUser);
   };
+
   return (
     <div className="settings">
       <div className="settingsWrapper">
@@ -54,40 +68,38 @@ export default function Settings() {
         <form className="settingsForm" onSubmit={handleSubmit}>
           <label>Profile Picture</label>
           <div className="settingsPP">
-            <img
-              src={
-                file
-                  ? URL.createObjectURL(file)
-                  : user?.profilePic
-                  ? PF + user.profilePic
-                  : "https://images.unsplash.com/photo-1529665253569-6d01c0eaf7b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NHx8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=500&q=60"
-              }
-              alt=""
-            />
-            <label htmlFor="fileInput">
+            <img src={profilePic ? profilePic : user?.profilePic} alt="" />
+            <label title="Click to change profile picture" htmlFor="fileInput">
               <i className="settingsPPIcon far fa-user-circle"></i>{" "}
             </label>
             <input
               id="fileInput"
               type="file"
+              accept="image/*"
               style={{ display: "none" }}
               className="settingsPPInput"
-              onChange={(e) => setFile(e.target.files[0])}
+              onChange={handleOnChangeFile}
             />
           </div>
-          <label>Username</label>
+          {fileUploading && <p>Updating profile pic...</p>}
+          {fileUploadingErr && (
+            <p style={{ color: "red" }}>
+              Some error occured please try again...
+            </p>
+          )}
+          <label>Name</label>
           <input
             type="text"
-            placeholder={user.username}
-            onChange={(e) => setUsername(e.target.value)}
+            placeholder={user?.name}
+            onChange={(e) => setName(e.target.value)}
             name="name"
           />
           <label>Email</label>
           <input
             type="email"
-            placeholder={user.email}
+            placeholder={user?.email}
             name="email"
-            onChange={(e) => setEmail(e.target.value)}
+            disabled={true}
           />
           <label>Password</label>
           <input
@@ -96,11 +108,16 @@ export default function Settings() {
             onChange={(e) => setPassword(e.target.value)}
             name="password"
           />
-          <button
-            disabled={!username && !email && !file && !password}
-            className="settingsSubmitButton"
-            type="submit"
-          >
+          <label>About yourself</label>
+          <textarea
+            type="text"
+            placeholder={user?.bio}
+            onChange={(e) => setBio(e.target.value)}
+            name="bio"
+            style={{ resize: "inherit" }}
+            rows={5}
+          />
+          <button className="settingsSubmitButton" type="submit">
             Update
           </button>
         </form>

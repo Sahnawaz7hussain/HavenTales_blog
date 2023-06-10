@@ -4,7 +4,6 @@ import axios from "axios";
 import "./singlePost.css";
 import { Context } from "../../context/Context";
 
-const PF = "http://localhost:8080/images/";
 export default function SinglePost() {
   const { postId } = useParams();
   const [post, setPost] = useState({});
@@ -52,7 +51,7 @@ export default function SinglePost() {
     <div className="singlePost">
       <div className="singlePostWrapper">
         {post.photo && (
-          <img src={PF + post.photo} alt="Phot" className="singlePostImg" />
+          <img src={post.photo} alt="Phot" className="singlePostImg" />
         )}
         {updateMode ? (
           <input
@@ -81,8 +80,8 @@ export default function SinglePost() {
         <div className="singlePostInfo">
           <span className="singlePostAuthor">
             Author:{" "}
-            <Link to={`/?user=${post.username}`} className="link">
-              <b>{post.username}</b>
+            <Link to={`/?user=${post._id}`} className="link">
+              <b>{post?.userId?.name}</b>
             </Link>
           </span>
           <span className="singlePostDate">

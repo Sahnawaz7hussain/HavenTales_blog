@@ -6,16 +6,17 @@ const {
   getPostById,
   allPosts,
 } = require("../controllers/postController");
+const { authentication } = require("../middleware/authentication");
 
 const postRouter = express.Router();
 //CREATE POST
-postRouter.post("/", createNewPost);
+postRouter.post("/", authentication, createNewPost);
 
 //UPDATE POST
-postRouter.put("/:id", updatePost);
+postRouter.put("/:id", authentication, updatePost);
 
 //DELETE POST
-postRouter.delete("/:id", deletePost);
+postRouter.delete("/:id", authentication, deletePost);
 
 //GET POST BY ID
 postRouter.get("/:id", getPostById);

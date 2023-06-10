@@ -72,13 +72,17 @@
   width: 30%;
 }
 
-.settingsForm > input {
+.settingsForm > input,
+.settingsForm > textarea {
   color: gray;
   margin-top: 10px;
   margin-bottom: 10px;
   height: 30px;
   border: none;
   border-bottom: 1px solid lightgray;
+}
+.settingsForm > textarea {
+  height: auto;
 }
 
 .settingsSubmitButton {

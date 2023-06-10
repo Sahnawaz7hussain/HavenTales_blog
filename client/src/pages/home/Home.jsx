@@ -7,10 +7,10 @@ import "./home.css";
 import { useLocation } from "react-router-dom";
 const baseUrl = import.meta.env.VITE_BASE_URL;
 const Home = () => {
+  const location = useLocation();
   const { search } = useLocation();
   const [posts, setPosts] = useState([]);
 
-  console.log(location);
   useEffect(() => {
     const fetchPosts = async () => {
       const res = await axios.get(`${baseUrl}/posts${search}`);

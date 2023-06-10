@@ -15,7 +15,7 @@ const createNewPost = async (req, res) => {
 const updatePost = async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.id);
-    if (post.username === req.body.username) {
+    if (req.body.userId === post.userId) {
       try {
         const updatedPost = await PostModel.findByIdAndUpdate(
           req.params.id,
@@ -38,12 +38,10 @@ const updatePost = async (req, res) => {
 
 // delete post
 const deletePost = async (req, res) => {
-  console.log("dlee: ", req.body);
   try {
     const post = await PostModel.findById(req.params.id);
-    if (post.username === req.body.username) {
+    if (req.body.userId === post.userId) {
       try {
-        // wait for testing.it may work or may not work
         await PostModel.findByIdAndDelete(req.params.id);
         res.status(200).json("Post has been deleted...");
       } catch (err) {
@@ -60,7 +58,10 @@ const deletePost = async (req, res) => {
 // get post by id
 const getPostById = async (req, res) => {
   try {
-    const post = await PostModel.findById(req.params.id);
+    const post = await PostModel.findById(req.params.id).populate(
+      "userId",
+      "name"
+    );
     res.status(200).json(post);
   } catch (err) {
     res.status(500).json(err);
@@ -69,20 +70,19 @@ const getPostById = async (req, res) => {
 
 // get all posts
 const allPosts = async (req, res) => {
-  const username = req.query.user;
-  const catName = req.query.cat;
+  const user = req.query.user;
+  const category = req.query.category;
+  console.log("user: ", user);
   try {
     let posts;
-    if (username) {
-      posts = await PostModel.find({ username });
-    } else if (catName) {
+    if (user) {
+      posts = await PostModel.find({ userId: user }).populate("userId", "name");
+    } else if (category) {
       posts = await PostModel.find({
-        categories: {
-          $in: [catName],
-        },
-      });
+        category: category,
+      }).populate("userId", "name");
     } else {
-      posts = await PostModel.find();
+      posts = await PostModel.find().populate("userId", "name");
     }
     res.status(200).json(posts);
   } catch (err) {

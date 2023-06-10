@@ -10,7 +10,7 @@ export default function Sidebar() {
       const res = await axios.get(
         `${import.meta.env.VITE_BASE_URL}/categories`
       );
-      console.log("res: ", res);
+      //console.log("res: ", res);
       setCategories(res.data);
     };
     getCategories();
@@ -32,7 +32,7 @@ export default function Sidebar() {
         <span className="sidebarTitle">CATEGORIES</span>
         <ul className="sidebarList">
           {categories.map((category, idx) => (
-            <Link key={idx} to={`/?cat=${category.name}`} className="link">
+            <Link key={idx} to={`/?category=${category.name}`} className="link">
               <li className="sidebarListItem">{category.name}</li>
             </Link>
           ))}

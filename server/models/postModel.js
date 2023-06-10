@@ -6,6 +6,7 @@ const PostSchema = new mongoose.Schema(
       type: String,
       required: [true, "Title can't be empty!"],
       unique: [true, "Duplicate post title"],
+      maxLength: [50, "Maximum length shuld be 50 charts"],
     },
     desc: {
       type: String,
@@ -13,18 +14,19 @@ const PostSchema = new mongoose.Schema(
     },
     photo: {
       type: String,
-      required: false,
     },
-    username: {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: [true, " can't empty!"],
+    },
+    category: {
       type: String,
-      required: [true, "Username can't empty!"],
-    },
-    categories: {
-      type: Array,
       required: false,
+      default: "other",
     },
   },
-  { timestamps: true }
+  { timestamps: true, versionKey: false }
 );
 
 const PostModel = mongoose.model("post", PostSchema);
