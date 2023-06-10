@@ -1,13 +1,15 @@
 .top {
   width: 100%;
-  height: 50px;
-  background: white;
+  height: 70px;
   position: sticky;
   top: 0;
   display: flex;
   align-items: center;
   font-family: "Josefin Sans", sans-serif;
-  z-index: 9;
+  z-index: 999;
+  background: transparent;
+  background-color: gainsboro;
+  border-bottom: 1px solid lightgray;
 }
 .topLeft,
 .topRight {
@@ -15,12 +17,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  /* border: 2px solid greenyellow; */
 }
-.topIcon {
-  font-size: 20px;
-  margin-right: 10px;
-  color: #444;
-  cursor: pointer;
+.topLeft > a > h3 {
+  font-weight: 500;
+  font-family: "Josefin Sans", sans-serif;
 }
 .topImg {
   height: 35px;
@@ -30,6 +31,7 @@
 }
 .topCenter {
   flex: 6;
+  /* border: 2px solid brown; */
 }
 
 .topList {
@@ -46,10 +48,52 @@
   font-weight: 300;
   cursor: pointer;
 }
+.mobile,
+.bars {
+  display: none;
+}
 
-.topSearchIcon {
-  font-size: 18;
-  color: #666;
-  cursor: pointer;
-  margin-left: 15px;
+@media screen and (max-width: 700px) {
+  .top {
+    justify-content: space-between;
+    padding: 0 3%;
+  }
+  .topLeft {
+    justify-content: flex-start;
+    width: fit-content;
+    flex: 0;
+    display: block;
+  }
+  .topCenter,
+  .topRight {
+    display: none;
+  }
+  .bars {
+    display: block;
+    font-size: 24px;
+    color: black;
+  }
+  .mobile {
+    display: block;
+    height: fit-content;
+    width: fit-content;
+    position: absolute;
+    right: 3%;
+    top: 60px;
+    padding: 20px;
+    border-radius: 8px;
+    background: rgb(183, 185, 183);
+  }
+  .topList {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .logoutButton {
+    background-color: red;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 8px;
+  }
 }

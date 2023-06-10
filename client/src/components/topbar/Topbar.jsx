@@ -1,25 +1,26 @@
 import { Link } from "react-router-dom";
 import "./topbar.css";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "../../context/Context";
 
 export default function Topbar() {
-  const PF = "http://localhost:8080/images/";
+  const [mobile, setMobile] = useState(false);
   const { user, dispatch } = useContext(Context);
 
   const handleLogout = () => {
     dispatch({ type: "LOGOUT" });
+    setMobile((pre) => !pre);
     //alert("logout");
   };
-
-  // console.log("user:top: ", user);
+  const mobileNavigation = () => {
+    setMobile((pre) => !pre);
+  };
   return (
     <div className="top">
       <div className="topLeft">
-        <i className="topIcon fa-brands fa-square-facebook"></i>
-        <i className="topIcon fa-brands fa-square-twitter"></i>
-        <i className="topIcon fa-brands fa-square-pinterest"></i>
-        <i className="topIcon fa-brands fa-square-instagram"></i>
+        <a href="/">
+          <h3>HavenTales</h3>
+        </a>
       </div>
       <div className="topCenter">
         <ul className="topList">
@@ -67,8 +68,61 @@ export default function Topbar() {
             </li>
           </ul>
         )}
-        <i className="topSearchIcon fa-solid fa-magnifying-glass"></i>
       </div>
+      {mobile ? (
+        <i
+          onClick={() => setMobile((pre) => !pre)}
+          class="bars fa-solid fa-xmark"
+        ></i>
+      ) : (
+        <i
+          onClick={() => setMobile((pre) => !pre)}
+          class="bars fa-solid fa-bars"
+        ></i>
+      )}
+      {mobile ? (
+        <div className="mobile">
+          <ul className="topList">
+            <Link to="/write" className="link">
+              <li onClick={mobileNavigation} className="topListItem">
+                WRITE
+              </li>
+            </Link>
+            {user ? (
+              <Link to="/settings" className="link">
+                <li onClick={mobileNavigation} className="topListItem">
+                  ACCOUNT SETTING
+                </li>
+              </Link>
+            ) : (
+              <>
+                <Link onClick={mobileNavigation} to="/login" className="link">
+                  <li className="topListItem">LOGIN</li>
+                </Link>
+                <Link to="/register" className="link">
+                  <li onClick={mobileNavigation} className="topListItem">
+                    REGISTER
+                  </li>
+                </Link>
+              </>
+            )}
+            <Link to="/about" className="link">
+              <li onClick={mobileNavigation} className="topListItem">
+                ABOUT
+              </li>
+            </Link>
+            <Link to="/contact" className="link">
+              <li onClick={mobileNavigation} className="topListItem">
+                CONTACT
+              </li>
+            </Link>
+
+            <li className="topListItem" onClick={handleLogout}>
+              {user && <button className="logoutButton">LOGOUT</button>}
+            </li>
+          </ul>
+        </div>
+      ) : null}
     </div>
   );
 }

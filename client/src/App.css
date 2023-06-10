@@ -2,3 +2,10 @@ button:disabled {
   background: rgb(134, 133, 133);
   color: black;
 }
+a {
+  text-decoration: none;
+  color: inherit;
+}
+body {
+  background-color: rgb(236, 235, 235);
+}
