@@ -1,9 +1,10 @@
 import { useContext, useState } from "react";
-import Sidebar from "../../components/sidebar/Sidebar";
 import axios from "axios";
-import { Context } from "../../context/Context";
+import { toast } from "react-toastify";
 import "./settings.css";
+import Sidebar from "../../components/sidebar/Sidebar";
 import { headersObject, uploadFileToCloudinary } from "../../utils/constants";
+import { Context } from "../../context/Context";
 
 export default function Settings() {
   const [profilePic, setProfilePic] = useState(null);
@@ -14,7 +15,7 @@ export default function Settings() {
   const [password, setPassword] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { user, dispatch } = useContext(Context);
+  const { user, dispatch, isFetching, error } = useContext(Context);
 
   const handleOnChangeFile = (e) => {
     const file = e.target.files[0];
@@ -50,12 +51,14 @@ export default function Settings() {
       );
       setSuccess(true);
       dispatch({ type: "UPDATE_SUCCESS", payload: res.data });
-      console.log("res: ", res);
+      toast.success("updated successfully!");
+      setBio("");
+      setName("");
+      setPassword("");
     } catch (err) {
-      console.log("err: ", err);
-      dispatch({ type: "UPDATE_FAILURE", payload: err });
+      toast.error(err.response.data);
+      dispatch({ type: "UPDATE_FAILURE", payload: err.response.data });
     }
-    console.log("updated ", updatedUser);
   };
 
   return (
@@ -117,8 +120,12 @@ export default function Settings() {
             style={{ resize: "inherit" }}
             rows={5}
           />
-          <button className="settingsSubmitButton" type="submit">
-            Update
+          <button
+            disabled={isFetching || fileUploading}
+            className="settingsSubmitButton"
+            type="submit"
+          >
+            {isFetching ? "Updating" : "Update"}
           </button>
         </form>
       </div>

@@ -1,8 +1,10 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./singlePost.css";
 import { Context } from "../../context/Context";
+import { headersObject } from "../../utils/constants";
 
 export default function SinglePost() {
   const { postId } = useParams();
@@ -11,6 +13,7 @@ export default function SinglePost() {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [updateMode, setUpdateMode] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getPost = async () => {
@@ -24,27 +27,51 @@ export default function SinglePost() {
     getPost();
   }, [postId]);
 
+  // delete post
   const deletePost = async () => {
+    setIsLoading(true);
     try {
       const res = await axios.delete(
         `${import.meta.env.VITE_BASE_URL}/posts/${postId}`,
-        { data: { username: user.username } }
+        { headers: headersObject() }
       );
-      window.location.replace("/");
+      setIsLoading(false);
+      toast.success("Post deleted.", { position: toast.POSITION.TOP_CENTER });
+      setTimeout(() => {
+        window.location.replace("/");
+      }, 2500);
     } catch (err) {
+      setIsLoading(false);
+      toast.error(err.response.data, { position: toast.POSITION.TOP_CENTER });
       console.log("err: ", err);
     }
   };
+
+  // update post.
   const handleUpdate = async () => {
+    if (!title || !desc) {
+      return toast.info("Please add and description", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
+    setIsLoading(true);
     try {
-      await axios.put(`${import.meta.env.VITE_BASE_URL}/posts/${post._id}`, {
-        username: user.username,
-        title,
-        desc,
+      await axios.put(
+        `${import.meta.env.VITE_BASE_URL}/posts/${post._id}`,
+        {
+          title,
+          desc,
+        },
+        { headers: headersObject() }
+      );
+      toast.success("Post updated successfully!", {
+        position: toast.POSITION.TOP_CENTER,
       });
       setUpdateMode(false);
+      setIsLoading(false);
     } catch (err) {
-      console.log("update error: ", err);
+      toast.error(err.response.data, { position: toast.POSITION.TOP_CENTER });
+      setIsLoading(false);
     }
   };
   return (
@@ -63,13 +90,14 @@ export default function SinglePost() {
         ) : (
           <h1 className="singlePostTitle">
             {title}
-            {post.username === user?.username && (
+            {post.userId?._id === user?._id && (
               <div className="singlePostEdit">
                 <i
                   onClick={() => setUpdateMode(true)}
                   className="singlePostIcon fa-regular fa-pen-to-square"
                 ></i>
                 <i
+                  disabled={isLoading}
                   onClick={deletePost}
                   className="singlePostIcon fa-regular fa-trash-can"
                 ></i>
@@ -80,7 +108,7 @@ export default function SinglePost() {
         <div className="singlePostInfo">
           <span className="singlePostAuthor">
             Author:{" "}
-            <Link to={`/?user=${post._id}`} className="link">
+            <Link to={`/?user=${post.userId?._id}`} className="link">
               <b>{post?.userId?.name}</b>
             </Link>
           </span>
@@ -99,8 +127,12 @@ export default function SinglePost() {
           <p className="singlePostDesc">{desc}</p>
         )}
         {updateMode && (
-          <button className="singlePostButton" onClick={handleUpdate}>
-            Update
+          <button
+            disabled={isLoading}
+            className="singlePostButton"
+            onClick={handleUpdate}
+          >
+            {isLoading ? "Updating" : "Update"}
           </button>
         )}
       </div>

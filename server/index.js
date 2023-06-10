@@ -11,6 +11,7 @@ const { authRouter } = require("./routes/authRoute");
 const { userRouter } = require("./routes/userRoute");
 const { postRouter } = require("./routes/postRoute");
 const { categoryRouter } = require("./routes/categoryRoute");
+const { commentRouter } = require("./routes/commentRoute");
 const PORT = process.env.PORT;
 
 // INITIALIZE EXPRESS APP
@@ -43,6 +44,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/posts", postRouter);
 app.use("/api/categories", categoryRouter);
+app.use("/api/comments", commentRouter);
 
 app.listen(PORT, async () => {
   try {

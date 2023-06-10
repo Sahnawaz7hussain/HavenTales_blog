@@ -7,12 +7,12 @@ const commentSchema = new mongoose.Schema(
       required: [true, "can't be empty!"],
     },
     comment: { type: String, required: [true, "can't be empty!"] },
-    user: {
+    userId: {
       type: mongoose.Schema.Types.ObjectId,
       required: [true, "can't be empty!"],
     },
   },
-  { timeseries: true, versionKey: false }
+  { timestamps: true, versionKey: false }
 );
 
 const CommentModel = mongoose.model("comment", commentSchema);

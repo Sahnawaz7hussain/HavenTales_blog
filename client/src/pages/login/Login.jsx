@@ -2,6 +2,7 @@ import axios from "axios";
 import { useContext, useRef } from "react";
 import { Link } from "react-router-dom";
 import { Context } from "../../context/Context";
+import { toast } from "react-toastify";
 import "./login.css";
 export default function Login() {
   const emailRef = useRef();
@@ -21,14 +22,19 @@ export default function Login() {
           password,
         }
       );
+      toast.success("Login Success! ", { position: toast.POSITION.TOP_CENTER });
+
       localStorage.setItem("token", res.data.token);
+
       dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err.response.data });
     }
   };
   if (error) {
-    alert(error);
+    toast.warning(error, {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
   return (
     <div className="login">

@@ -1,6 +1,7 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./register.css";
 import { uploadFileToCloudinary } from "../../utils/constants";
 import { Context } from "../../context/Context";
@@ -10,7 +11,8 @@ const initSignupData = {
   email: "",
   password: "",
   bio: "",
-  profilePic: "",
+  profilePic:
+    "https://www.kindpng.com/picc/m/252-2524695_dummy-profile-image-jpg-hd-png-download.png",
 };
 
 export default function Register() {
@@ -50,27 +52,37 @@ export default function Register() {
   // handle fubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!signupData.name || !signupData.email || !signupData.password)
-      return alert("all fields are required!");
+    if (signupData.bio.length === 0) {
+      signupData.bio = "Bio not added";
+    }
+    if (!signupData.name || !signupData.email || !signupData.password) {
+      toast("All fields are required!");
+      return;
+    }
     setError(null);
     setIsLoading(true);
-    signupData.profilePic = file;
+    file && (signupData.profilePic = file);
     try {
       const res = await axios.post(
         `${import.meta.env.VITE_BASE_URL}/auth/register`,
         signupData
       );
       setIsLoading(false);
-      res.data && alert("Signup success");
+      res.data &&
+        toast.success("Registered Success.", {
+          position: toast.POSITION.TOP_CENTER,
+        });
       setTimeout(() => window.location.replace("/login"), 5000);
       console.log("register: ", res);
     } catch (err) {
       setIsLoading(false);
-      setError(err);
+      setError(err.response.data);
     }
   };
   if (error) {
-    alert(error);
+    toast.info(error, {
+      position: toast.POSITION.TOP_CENTER,
+    });
   }
 
   return (

@@ -1,9 +1,6 @@
 const bcrypt = require("bcryptjs");
 const { UserModel } = require("../models/userModel");
 const { PostModel } = require("../models/postModel");
-
-///if password :-> update password,
-/// otherwise update only user;
 const updateUser = async (req, res) => {
   if (req.body.userId === req.params.id) {
     if (req.body.password) {

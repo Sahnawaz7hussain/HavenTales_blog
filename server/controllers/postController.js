@@ -13,9 +13,11 @@ const createNewPost = async (req, res) => {
 
 // update post
 const updatePost = async (req, res) => {
+  const updateId = req.params.id;
+  const userId = req.body.userId;
   try {
-    const post = await PostModel.findById(req.params.id);
-    if (req.body.userId === post.userId) {
+    const post = await PostModel.findById(updateId).populate("userId", "name");
+    if (userId == post.userId._id) {
       try {
         const updatedPost = await PostModel.findByIdAndUpdate(
           req.params.id,
@@ -29,7 +31,7 @@ const updatePost = async (req, res) => {
         res.status(500).json(err);
       }
     } else {
-      res.status(401).json("You can update only your post!");
+      res.status(401).json("You can only update your post!");
     }
   } catch (err) {
     res.status(500).json(err);
@@ -40,7 +42,7 @@ const updatePost = async (req, res) => {
 const deletePost = async (req, res) => {
   try {
     const post = await PostModel.findById(req.params.id);
-    if (req.body.userId === post.userId) {
+    if (req.body.userId == post.userId) {
       try {
         await PostModel.findByIdAndDelete(req.params.id);
         res.status(200).json("Post has been deleted...");

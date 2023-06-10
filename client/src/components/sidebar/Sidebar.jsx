@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
-import "./sidebar.css";
-import axios from "axios";
+import { useContext, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import "./sidebar.css";
+import sahnawazPic from "../../assets/sahnawaz.png";
+import { Context } from "../../context/Context";
+
 export default function Sidebar() {
   const [categories, setCategories] = useState([]);
+
+  const { user } = useContext(Context);
 
   useEffect(() => {
     const getCategories = async () => {
@@ -19,13 +24,15 @@ export default function Sidebar() {
     <div className="sidebar">
       <div className="sidebarItem">
         <span className="sidebarTitle">ABOUT ME</span>
-        <img
-          src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTh8fHByb2ZpbGV8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60"
-          alt="about me"
-        />
+        <img src={user ? user.profilePic : sahnawazPic} alt="about me" />
         <p>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Sint, non
-          dolorem molestias animi quae rem quisquam
+          {user
+            ? user.bio
+            : `Sahnawaz Hussain is a Full Stack Web Developer specializing in MERN
+          stack with expertise in building ecommerce websites. Proficient in
+          HTML, CSS, JavaScript, ReactJS, Redux, and GitHub. Strong soft skills
+          in teamwork, creativity, and communication. Completed Full Stack
+          Development training from Masai School.`}
         </p>
       </div>
       <div className="sidebarItem">

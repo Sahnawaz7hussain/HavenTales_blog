@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./write.css";
 import { Context } from "../../context/Context";
 import { headersObject, uploadFileToCloudinary } from "../../utils/constants";
@@ -8,7 +9,8 @@ const initPostData = {
   title: "",
   desc: "",
   category: "Life",
-  photo: "",
+  photo:
+    "https://images.unsplash.com/photo-1686226347032-b82efa11af93?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1031&q=80",
 };
 
 export default function Write() {
@@ -30,8 +32,14 @@ export default function Write() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const { title, desc, category } = postData;
     setIsLoading(true);
     setIsError(false);
+    if (!title || !category || !desc) {
+      return toast.warning("all fiels are required", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+    }
     if (file) {
       try {
         let res = await uploadFileToCloudinary(file);
@@ -48,16 +56,20 @@ export default function Write() {
         postData,
         { headers: headersObject() }
       );
-      window.location.replace(`/post/${res.data._id}`);
+      toast.success("New post added successfully!", {
+        position: toast.POSITION.TOP_CENTER,
+      });
+      setTimeout(() => {
+        window.location.replace(`/post/${res.data._id}`);
+      }, 4500);
       setIsLoading(false);
       setIsError(false);
       console.log("new pst res: ", res);
     } catch (err) {
       setIsError(true);
       setIsLoading(false);
-      console.log(er);
+      toast.error(err.response.data, { position: toast.POSITION.TOP_CENTER });
     }
-    console.log("post Data: ", postData);
   };
 
   // console.log("bahar: ", postData);
@@ -84,11 +96,17 @@ export default function Write() {
             autoFocus={true}
             onChange={handleInputOnChange}
             name="title"
+            required
           />
         </div>
         <div className="writeFormGroupSelect">
           <label htmlFor="category">Category</label>
-          <select onChange={handleInputOnChange} name="category" id="category">
+          <select
+            required
+            onChange={handleInputOnChange}
+            name="category"
+            id="category"
+          >
             <option value="Life">Life</option>
             <option value="Fashion">Fashion</option>
             <option value="Tech">Tech</option>
@@ -99,6 +117,7 @@ export default function Write() {
         </div>
         <div className="writeFormGroup">
           <textarea
+            required
             placeholder="Share your story..."
             type={"text"}
             className="writeInput writeText"
@@ -107,7 +126,7 @@ export default function Write() {
           ></textarea>
         </div>
         <button className="writeSubmit" disabled={isLoading} type="submit">
-          Publish
+          {isLoading ? "Publishing" : "Publish"}
         </button>
       </form>
       {isError && (
