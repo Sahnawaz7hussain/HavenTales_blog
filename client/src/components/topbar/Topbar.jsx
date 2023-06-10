@@ -72,12 +72,12 @@ export default function Topbar() {
       {mobile ? (
         <i
           onClick={() => setMobile((pre) => !pre)}
-          class="bars fa-solid fa-xmark"
+          className="bars fa-solid fa-xmark"
         ></i>
       ) : (
         <i
           onClick={() => setMobile((pre) => !pre)}
-          class="bars fa-solid fa-bars"
+          className="bars fa-solid fa-bars"
         ></i>
       )}
       {mobile ? (

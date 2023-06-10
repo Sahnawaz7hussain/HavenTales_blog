@@ -7,7 +7,8 @@ export default function Single() {
     <div className="single">
       {/* post */}
       <SinglePost />
-      <Sidebar />
+
+      <Sidebar type={"single"} />
     </div>
   );
 }

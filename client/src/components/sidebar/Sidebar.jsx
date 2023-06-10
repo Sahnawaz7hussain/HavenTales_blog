@@ -5,9 +5,8 @@ import "./sidebar.css";
 import sahnawazPic from "../../assets/sahnawaz.png";
 import { Context } from "../../context/Context";
 
-export default function Sidebar() {
+export default function Sidebar({ type }) {
   const [categories, setCategories] = useState([]);
-
   const { user } = useContext(Context);
 
   useEffect(() => {
@@ -21,7 +20,7 @@ export default function Sidebar() {
     getCategories();
   }, []);
   return (
-    <div className="sidebar">
+    <div className={type == "single" ? "hide sidebar" : "sidebar"}>
       <div className="sidebarItem">
         <span className="sidebarTitle">ABOUT ME</span>
         <img src={user ? user.profilePic : sahnawazPic} alt="about me" />

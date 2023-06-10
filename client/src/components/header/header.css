@@ -1,4 +1,9 @@
 .header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-top: 60px;
 }
 .headerTitles {
@@ -24,4 +29,12 @@
   height: 450px;
   margin-top: 80px;
   object-fit: cover;
+}
+@media screen and (max-width: 500px) {
+  .headerTitleSm {
+    top: 13%;
+  }
+  .headerTitleLg {
+    top: 15%;
+  }
 }

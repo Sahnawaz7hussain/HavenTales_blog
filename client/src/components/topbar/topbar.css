@@ -8,7 +8,7 @@
   font-family: "Josefin Sans", sans-serif;
   z-index: 999;
   background: transparent;
-  background-color: gainsboro;
+  background-color: #fff;
   border-bottom: 1px solid lightgray;
 }
 .topLeft,
@@ -56,6 +56,7 @@
 @media screen and (max-width: 700px) {
   .top {
     justify-content: space-between;
+    box-sizing: border-box;
     padding: 0 3%;
   }
   .topLeft {
@@ -82,7 +83,7 @@
     top: 60px;
     padding: 20px;
     border-radius: 8px;
-    background: rgb(183, 185, 183);
+    background: rgb(173, 175, 173);
   }
   .topList {
     display: flex;
