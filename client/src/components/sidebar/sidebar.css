@@ -46,8 +46,14 @@
 .sidebarListItem {
   display: inline-block;
   width: 50%;
+  font-size: 13px;
   margin-top: 15px;
   cursor: pointer;
+  font-family: "PT Sans", sans-serif;
+}
+.sidebarBio {
+  color: rgb(86, 86, 87);
+  font-family: "PT Sans", sans-serif;
 }
 .sidebarSocial {
   margin-top: 15px;

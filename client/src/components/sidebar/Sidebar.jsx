@@ -34,7 +34,7 @@ export default function Sidebar({ type }) {
       <div className="sidebarItem">
         <span className="sidebarTitle">ABOUT ME</span>
         <img src={user ? user.profilePic : sahnawazPic} alt="about me" />
-        <p>
+        <p className="sidebarBio">
           {user
             ? user.bio
             : `Sahnawaz Hussain is a Full Stack Web Developer specializing in MERN
