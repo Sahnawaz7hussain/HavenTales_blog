@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import "./write.css";
 import { Context } from "../../context/Context";
 import { headersObject, uploadFileToCloudinary } from "../../utils/constants";
-
 const initPostData = {
   title: "",
   desc: "",

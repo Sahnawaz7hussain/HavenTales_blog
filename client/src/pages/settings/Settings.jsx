@@ -129,7 +129,7 @@ export default function Settings() {
           </button>
         </form>
       </div>
-      <Sidebar />
+      <Sidebar type={"single"} />
     </div>
   );
 }

@@ -4,18 +4,28 @@ import axios from "axios";
 import "./sidebar.css";
 import sahnawazPic from "../../assets/sahnawaz.png";
 import { Context } from "../../context/Context";
+import Loading from "../loading/Loading";
 
 export default function Sidebar({ type }) {
   const [categories, setCategories] = useState([]);
   const { user } = useContext(Context);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     const getCategories = async () => {
-      const res = await axios.get(
-        `${import.meta.env.VITE_BASE_URL}/categories`
-      );
-      //console.log("res: ", res);
-      setCategories(res.data);
+      setLoading(true);
+      setError(false);
+      try {
+        const res = await axios.get(
+          `${import.meta.env.VITE_BASE_URL}/categories`
+        );
+        setCategories(res.data);
+        setLoading(false);
+      } catch (err) {
+        setLoading(false);
+        setError(false);
+      }
     };
     getCategories();
   }, []);
@@ -36,13 +46,27 @@ export default function Sidebar({ type }) {
       </div>
       <div className="sidebarItem">
         <span className="sidebarTitle">CATEGORIES</span>
-        <ul className="sidebarList">
-          {categories.map((category, idx) => (
-            <Link key={idx} to={`/?category=${category.name}`} className="link">
-              <li className="sidebarListItem">{category.name}</li>
-            </Link>
-          ))}
-        </ul>
+        {loading ? (
+          <Loading />
+        ) : error ? (
+          <div style={{ width: "100%" }}>
+            <p style={{ textAlign: "center", color: "red" }}>
+              Something went wrong to fetch category!
+            </p>{" "}
+          </div>
+        ) : (
+          <ul className="sidebarList">
+            {categories.map((category, idx) => (
+              <Link
+                key={idx}
+                to={`/?category=${category.name}`}
+                className="link"
+              >
+                <li className="sidebarListItem">{category.name}</li>
+              </Link>
+            ))}
+          </ul>
+        )}
       </div>
       <div className="sidebarItem">
         <span className="sidebarTitle">FOLLOW US</span>
