@@ -1,9 +1,9 @@
 import "./loading.css";
 import loginGif from "../../assets/loading.gif";
 
-export default function Loading() {
+export default function Loading({ type }) {
   return (
-    <div className="loading">
+    <div className={type === "category" ? "category loading" : "loading"}>
       <img src={loginGif} alt="LOADING..." />
     </div>
   );

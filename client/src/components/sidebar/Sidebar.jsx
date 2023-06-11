@@ -47,7 +47,7 @@ export default function Sidebar({ type }) {
       <div className="sidebarItem">
         <span className="sidebarTitle">CATEGORIES</span>
         {loading ? (
-          <Loading />
+          <Loading type={"category"} />
         ) : error ? (
           <div style={{ width: "100%" }}>
             <p style={{ textAlign: "center", color: "red" }}>
