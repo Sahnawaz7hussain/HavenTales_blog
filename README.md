@@ -26,6 +26,7 @@
    - Delete your own post/blog
 
 ### Please visit [Backend Repo](https://github.com/Sahnawaz7hussain/HavenTales_backend) to see updated backend code.
+### [Presentation video on Youtube](https://youtu.be/UpRU2ek4V7I)
 
 # Project Screenshots
 
